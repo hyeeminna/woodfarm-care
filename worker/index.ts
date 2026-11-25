@@ -4,6 +4,7 @@ import { inquiryStatus, settings } from "../src/content";
 import { canMove } from "../src/lib/status";
 import { type Bindings, bad, clean, describeError, ownerOnly, rateLimited } from "./lib";
 import { mountSettings } from "./settings";
+import quoteRoutes from "./firebase-quotes";
 
 const app = new Hono<{ Bindings: Bindings }>().basePath("/api");
 
@@ -18,6 +19,8 @@ app.get("/health", c => c.json({ ok: true }));
 app.get("/admin/summary", ownerOnly, c => c.json({ ok: true }));
 
 mountSettings(app, settings);
+
+// quoteRoutes has absolute /api paths; mount on the base app separately below.
 
 // --- _base 견본: 문의 하나 → 소유자 목록 → 상태·담당자 변경. 새 템플릿은 자기 표로 바꾼다. ---
 const code6 = () => [...crypto.getRandomValues(new Uint8Array(6))].map(b => "ABCDEFGHJKMNPQRSTUVWXYZ23456789"[b % 31]).join("");
@@ -55,4 +58,7 @@ app.onError((err, c) => {
   return c.json({ error: "잠시 뒤 다시 시도해 주세요" }, 500);
 });
 
-export default app;
+const root = new Hono<{ Bindings: Bindings & { FIREBASE_SERVICE_ACCOUNT_JSON?: string } }>();
+root.route("/", quoteRoutes);
+root.route("/", app);
+export default root;

@@ -23,3 +23,16 @@ CREATE TABLE IF NOT EXISTS inquiry (
   assignee TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
+
+-- 방문견적 신청. 제출 식별자는 다시 보내기를 중복 저장하지 않기 위해 사용한다.
+CREATE TABLE IF NOT EXISTS quote_requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  request_id TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  people TEXT NOT NULL,
+  furniture TEXT NOT NULL,
+  services TEXT NOT NULL,
+  consent INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);

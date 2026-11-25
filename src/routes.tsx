@@ -1,7 +1,7 @@
 import type { RouteObject } from "react-router";
 import App from "./App";
-import Admin from "./pages/Admin";
 import Home from "./pages/Home";
+import Estimate from "./pages/Estimate";
 
 // Every page of the app is listed here, and only here. main.tsx builds the router from this
 // array and exposes it as window.__baze.routes so the BAZE preview can list the pages.
@@ -12,7 +12,8 @@ export const routes: RouteObject[] = [
   {
     element: <App />,
     children: [
-      { path: "/admin", element: <Admin />, handle: { owner: true } },
+      { index: true, element: <Home /> },
+      { path: "/estimate", element: <Estimate /> },
       { path: "*", element: <Home /> },
     ],
   },

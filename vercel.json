@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/estimate", "destination": "/index.html" }
+  ]
+}
